@@ -1,0 +1,71 @@
+#Training Program
+import nltk
+from nltk.collocations import *
+from nltk.corpus import PlaintextCorpusReader
+import math
+import os
+import cPickle as pickle
+import classify
+from collections import Counter
+from decimal import *
+
+
+def filt(x):
+    return x.label()=="ONE" or x.label()=="TWO" or x.label()=="THREE" or x.label()=="THREE" or x.label()=="FOUR" or x.label()=="FIVE"
+
+if __name__ == "__main__":
+    # f = open("./declaration")
+    # f = open("./test.txt")
+    f = open("./aclImdb/train/neg/9999_3.txt")
+    text = f.read()
+
+    pos_bigram_measures = nltk.collocations.BigramAssocMeasures()
+    pos_finder = BigramCollocationFinder.from_words(classify.tokenize(text))
+    for i in pos_finder.nbest(pos_bigram_measures.pmi, 10):
+        print i[0] + "," + i[1]
+
+    pos = nltk.pos_tag(classify.tokenize(text))
+
+    grammar = r"""
+    ONE:
+        {<JJ><NN|NNS><.*>}
+    TWO:
+        {<RB|RBR|RBS><JJ><^NN.>}
+    THREE:
+        {<JJ><JJ><[^NN].><.*>}
+    FOUR:
+        {<NN|NNS><JJ><^NN.><.*>}
+    FIVE:
+        {<RB|RBR|RBS><VB|VBD|VBN|VBG><.*>}
+    """
+    cp = nltk.RegexpParser(grammar)
+    output = cp.parse(pos)
+
+    phrases = []
+    for subtree in output.subtrees(filter =  filt): # Generate all subtrees
+        # print subtree
+        phrases.append(subtree.productions())
+
+    phraseList = []
+    for prod in phrases:
+        phraseList.append(prod[0].rhs()[:2])
+    print "________________________________"
+    for i in phraseList:
+        print i[0][0] + ", " + i[1][0]
+
+
+    # path = "./aclImdb/train/pos/"
+    # wordlists = PlaintextCorpusReader(path, '.*')
+    # pos_bigram_measures = nltk.collocations.BigramAssocMeasures()
+    # pos_finder = BigramCollocationFinder.from_words(wordlists.words())
+
+    # print pos_finder.nbest(pos_bigram_measures.pmi, 100)
+    # print "POS DONE"
+
+    # path = "./aclImdb/train/pos/"
+    # wordlists = PlaintextCorpusReader(path, '.*')
+    # neg_bigram_measures = nltk.collocations.BigramAssocMeasures()
+    # neg_finder = BigramCollocationFinder.from_words(wordlists.words())
+
+    # print neg_finder.nbest(neg_bigram_measures.pmi, 100)
+    # print "NEG DONE"
