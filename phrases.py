@@ -11,7 +11,7 @@ def filt(x):
 #Each element in the list is a tuple of tuples
 #An element is in the form of
 #(("word1", POS), ("word2", POS))
-def phrases(text)
+def phrases(text):
     pos_bigram_measures = nltk.collocations.BigramAssocMeasures()
     pos_finder = BigramCollocationFinder.from_words(text)
     pos = nltk.pos_tag(text)
