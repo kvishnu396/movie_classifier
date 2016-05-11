@@ -7,7 +7,7 @@ model = SVC(kernel='linear', cache_size=1e3)
 cparams = list(map(lambda x : 10**x, linspace(-3,3,20)))
 parameters = {'C':cparams}
 classifier = GridSearchCV(model, parameters)
-problem_labels = [1]*500 + [0]*500
+problem_labels = [1]*2500 + [0]*2500
 
 with open('problem.matrix', 'rb') as f:
     problem_features = load(f)

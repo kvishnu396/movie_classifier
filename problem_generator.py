@@ -5,13 +5,11 @@ from nltk.tokenize import word_tokenize as tokenize
 from scipy.sparse import lil_matrix
 from phrases import phrases
 
-pos_dir = '/home/ihsan/Cooper/Sophomore/NLP/aclImdb/train/pos/'
-neg_dir = '/home/ihsan/Cooper/Sophomore/NLP/aclImdb/train/neg/'
+pos_dir = 'dataset/train/pos/'
+neg_dir = 'dataset/train/neg/'
 
-#pos_files = [(1,x) for x in os.listdir(pos_dir)][:5]
-#neg_files = [(0,x) for x in os.listdir(neg_dir)][:5]
-pos_files = os.listdir(pos_dir)[:500]
-neg_files = os.listdir(neg_dir)[:500]
+pos_files = os.listdir(pos_dir)[:2500]
+neg_files = os.listdir(neg_dir)[:2500]
 train_files = chain(pos_files, neg_files)
 
 with open('sword.set', 'rb') as f:
@@ -20,11 +18,11 @@ with open('sword.set', 'rb') as f:
 with open('phrase.set','rb') as f:
     phrase_list = load(f)
 
-problem = lil_matrix((1000, 18345))
+problem = lil_matrix((5000, 17173))
 n = 0
 
 for i, tfile in enumerate(train_files):
-    if i < 500:
+    if i < 2500:
         fdir = pos_dir
     else:
         fdir = neg_dir
@@ -38,7 +36,7 @@ for i, tfile in enumerate(train_files):
             problem[i, ind] = 1
     for p in fphrases:
         if p in phrase_list:
-            ind = phrase_list.index(p) + 4283
+            ind = phrase_list.index(p) + 3111
             problem[i, ind] = 1
 
 with open('problem.matrix', 'wb') as f:

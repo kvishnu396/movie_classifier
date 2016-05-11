@@ -5,11 +5,11 @@ from nltk.tokenize import word_tokenize as tokenize
 from scipy.sparse import lil_matrix
 from phrases import phrases
 
-pos_dir = '/home/ihsan/Cooper/Sophomore/NLP/aclImdb/test/pos/'
-neg_dir = '/home/ihsan/Cooper/Sophomore/NLP/aclImdb/test/neg/'
+pos_dir = 'dataset/test/pos/'
+neg_dir = 'dataset/test/neg/'
 
-pos_files = os.listdir(pos_dir)[:500]
-neg_files = os.listdir(neg_dir)[:500]
+pos_files = os.listdir(pos_dir)[1000:1500]
+neg_files = os.listdir(neg_dir)[1000:1500]
 train_files = chain(pos_files, neg_files)
 
 with open('sword.set', 'rb') as f:
@@ -18,7 +18,7 @@ with open('sword.set', 'rb') as f:
 with open('phrase.set','rb') as f:
     phrase_list = load(f)
 
-problem = lil_matrix((1000, 18345))
+problem = lil_matrix((1000, 17173))
 n = 0
 
 for i, tfile in enumerate(train_files):
@@ -36,7 +36,7 @@ for i, tfile in enumerate(train_files):
             problem[i, ind] = 1
     for p in fphrases:
         if p in phrase_list:
-            ind = phrase_list.index(p) + 4283
+            ind = phrase_list.index(p) +3111 
             problem[i, ind] = 1
 
 with open('test.matrix', 'wb') as f:

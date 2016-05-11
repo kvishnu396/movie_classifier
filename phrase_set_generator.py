@@ -3,8 +3,8 @@ from pickle import dump
 from nltk.tokenize import word_tokenize as tokenize
 from phrases import phrases
 
-pos_dir = '/home/ihsan/Cooper/Sophomore/NLP/aclImdb/train/pos/'
-neg_dir = '/home/ihsan/Cooper/Sophomore/NLP/aclImdb/train/neg/'
+pos_dir = 'dataset/train/pos/'
+neg_dir = 'dataset/train/neg/'
 
 pos_files = [(1,x) for x in os.listdir(pos_dir)][:500]
 neg_files = [(0,x) for x in os.listdir(neg_dir)][:500]
